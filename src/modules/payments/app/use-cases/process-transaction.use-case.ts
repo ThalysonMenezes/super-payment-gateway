@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { Transaction } from '@/modules/payments/domain/entities/transaction';
-import type { ITransactionRepository } from '@/modules/payments/domain/repositories';
+import { ITransactionRepository } from '@/modules/payments/domain/repositories';
 
 interface ProcessTransactionInput {
   merchantId: string;
@@ -23,7 +23,7 @@ export class ProcessTransactionUseCase {
     if (existingTransaction) {
       // Se já existe, retornamos a transação atual em vez de criar uma nova
       // Em fintechs, se o valor for diferente para a mesma chave, geramos erro.
-      if (existingTransaction.toJSON().amount !== input.amount) {
+      if (existingTransaction.toJSON().amount !== String(input.amount)) {
         throw new ConflictException('Idempotency key used with different transaction amount');
       }
       return existingTransaction;

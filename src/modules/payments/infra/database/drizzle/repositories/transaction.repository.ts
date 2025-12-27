@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Transaction } from '@/modules/payments/domain/entities/transaction';
 import { TransactionMapper } from '@/modules/payments/infra/database/drizzle/mappers';
 import { ITransactionRepository } from '@/modules/payments/domain/repositories';
@@ -6,17 +6,21 @@ import * as schema from '@/modules/payments/infra/database/drizzle/schema';
 
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq, and } from 'drizzle-orm';
+import { DRIZZLE_DB } from '@/infra/database/postgres-drizzle/connection';
 
 @Injectable()
 export class DrizzleTransactionRepository implements ITransactionRepository {
-  constructor(private readonly db: NodePgDatabase<typeof schema>) {}
+  constructor(
+    @Inject(DRIZZLE_DB)
+    private readonly db: NodePgDatabase<typeof schema>,
+  ) {}
 
   async findByExternalId(merchantId: string, idempotencyKey: string): Promise<Transaction | null> {
     const result = await this.db
       .select()
       .from(schema.transactions)
       .where(
-        and(eq(schema.transactions.merchantId, merchantId), eq(schema.transactions.idempotency_key, idempotencyKey)),
+        and(eq(schema.transactions.merchantId, merchantId), eq(schema.transactions.idempotencyKey, idempotencyKey)),
       )
       .limit(1);
 

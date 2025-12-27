@@ -58,6 +58,7 @@ export class Transaction {
     return {
       id: this._id,
       ...this._props,
+      amount: this._props.amount.toString(),
     };
   }
 }

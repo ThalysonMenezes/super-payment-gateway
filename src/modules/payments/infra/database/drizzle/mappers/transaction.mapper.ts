@@ -21,10 +21,10 @@ export class TransactionMapper {
     return {
       id: data.id,
       merchantId: data.merchantId,
-      amount: data.amount,
+      amount: BigInt(data.amount),
       status: data.status,
-      idempotency_key: data.idempotencyKey,
-      provider_response: data.providerResponse ?? null,
+      idempotencyKey: data.idempotencyKey,
+      providerResponse: data.providerResponse ?? null,
       created_at: data.createdAt,
       updated_at: data.updatedAt,
     };

@@ -1,1 +1,1 @@
-export type { ITransactionRepository } from './transaction.repository';
+export { ITransactionRepository } from './transaction.repository';

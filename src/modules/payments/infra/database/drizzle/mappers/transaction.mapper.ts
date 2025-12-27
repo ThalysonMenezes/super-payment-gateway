@@ -24,7 +24,7 @@ export class TransactionMapper {
       amount: data.amount,
       status: data.status,
       idempotency_key: data.idempotencyKey,
-      provider_response: data.providerResponse,
+      provider_response: data.providerResponse ?? null,
       created_at: data.createdAt,
       updated_at: data.updatedAt,
     };

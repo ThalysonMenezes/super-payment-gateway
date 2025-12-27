@@ -11,7 +11,7 @@ export class ProcessTransactionController {
     const result = await this.processTransactionUseCase.execute({
       merchantId: dto.merchantId,
       idempotencyKey: dto.idempotencyKey,
-      amount: BigInt(Math.round(dto.amount * 100)), // Convertendo decimal para centavos (bigint)
+      amount: dto.amount,
       paymentMethod: dto.paymentMethod,
     });
 

@@ -5,7 +5,7 @@ export class TransactionMapper {
     return new Transaction(
       {
         merchantId: raw.merchantId,
-        amount: BigInt(raw.amount),
+        amount: raw.amount,
         status: raw.status,
         idempotencyKey: raw.idempotencyKey,
         providerResponse: raw.providerResponse,

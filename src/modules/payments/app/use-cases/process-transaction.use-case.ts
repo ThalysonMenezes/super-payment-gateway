@@ -1,11 +1,12 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { Transaction } from '@/modules/payments/domain/entities/transaction';
 import { ITransactionRepository } from '@/modules/payments/domain/repositories';
+import { Amount } from '@/common/domain/value-objects/amount.vo';
 
 interface ProcessTransactionInput {
   merchantId: string;
   idempotencyKey: string;
-  amount: bigint;
+  amount: number;
   paymentMethod: string;
 }
 
@@ -32,7 +33,7 @@ export class ProcessTransactionUseCase {
     const transaction = new Transaction({
       merchantId: input.merchantId,
       idempotencyKey: input.idempotencyKey,
-      amount: input.amount,
+      amount: Amount.create(input.amount),
       status: 'PENDING',
     });
 

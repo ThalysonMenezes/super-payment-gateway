@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, IsUUID, Min, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, Min, MaxLength, IsInt } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ProcessTransactionDTO {
@@ -13,9 +13,9 @@ export class ProcessTransactionDTO {
   @MaxLength(100)
   idempotencyKey: string;
 
-  @ApiProperty({ example: 100.5, description: 'Valor em formato decimal/float' })
-  @IsNumber()
-  @Min(0.01)
+  @ApiProperty({ example: 100, description: 'Amount em formato inteiro/number' })
+  @IsInt({ message: 'O amount deve ser um número inteiro (centavos)' })
+  @Min(1, { message: 'O amount não pode ser menor que 1' })
   @IsNotEmpty()
   amount: number;
 

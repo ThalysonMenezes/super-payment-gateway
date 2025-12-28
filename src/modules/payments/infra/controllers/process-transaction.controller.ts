@@ -1,10 +1,14 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { ProcessTransactionUseCase } from '@/modules/payments/app/use-cases/process-transaction.use-case';
 import { ProcessTransactionDTO } from '@/modules/payments/infra/controllers/process-transaction.dto';
+import { ListTransactionsQuery } from '@/modules/payments/app/queries';
 
 @Controller('payments')
 export class ProcessTransactionController {
-  constructor(private readonly processTransactionUseCase: ProcessTransactionUseCase) {}
+  constructor(
+    private readonly processTransactionUseCase: ProcessTransactionUseCase,
+    private readonly listTransactionsQuery: ListTransactionsQuery,
+  ) {}
 
   @Post('process')
   async handle(@Body() dto: ProcessTransactionDTO) {
@@ -16,5 +20,11 @@ export class ProcessTransactionController {
     });
 
     return { success: true, data: result.toJSON() };
+  }
+
+  @Get()
+  async listTransactions(@Query('page') page: number = 1, @Query('limit') limit: number = 10) {
+    const result = await this.listTransactionsQuery.execute({ page: Number(page), limit: Number(limit) });
+    return { succes: true, ...result };
   }
 }

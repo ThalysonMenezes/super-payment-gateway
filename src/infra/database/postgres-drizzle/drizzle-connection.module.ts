@@ -1,20 +1,11 @@
-// import { drizzle } from 'drizzle-orm/node-postgres';
-// import { Pool } from 'pg';
-// import * as schema from './schema';
-
-// const pool = new Pool({
-//   connectionString: process.env.DATABASE_URL,
-// });
-
-// export const db = drizzle(pool, { schema });
-
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import * as schema from './schema';
 
 export const DRIZZLE_DB = Symbol('DRIZZLE_DB');
 
+@Global()
 @Module({
   providers: [
     {

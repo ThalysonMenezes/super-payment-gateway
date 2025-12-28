@@ -6,7 +6,7 @@ import * as schema from '@/modules/payments/infra/database/drizzle/schema';
 
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { eq, and } from 'drizzle-orm';
-import { DRIZZLE_DB } from '@/infra/database/postgres-drizzle/connection';
+import { DRIZZLE_DB } from '@/infra/database/postgres-drizzle/drizzle-connection.module';
 
 @Injectable()
 export class DrizzleTransactionRepository implements ITransactionRepository {

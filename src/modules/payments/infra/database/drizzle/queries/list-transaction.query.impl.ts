@@ -6,7 +6,7 @@ import { DRIZZLE_DB } from '@/infra/database/postgres-drizzle/drizzle-connection
 import * as schema from '@/modules/payments/infra/database/drizzle/schema';
 import { ListTransactionsInput } from '@/modules/payments/app/queries/list-transactions.query';
 import { sql } from 'drizzle-orm';
-import { createPaginationResponse } from '@/common/infra/database/drizzle-pagination';
+import { createPaginationResponse, withPagination } from '@/common/infra/database/drizzle-pagination';
 
 export class DrizzleListTransactions implements ListTransactionsQuery {
   constructor(
@@ -15,8 +15,7 @@ export class DrizzleListTransactions implements ListTransactionsQuery {
   ) {}
 
   async execute(input: ListTransactionsInput) {
-    const { page, limit } = input;
-    const offset = (page - 1) * limit;
+    const { limit, offset, page } = withPagination(input.page, input.limit);
 
     const [totalResult, rows] = await Promise.all([
       this.db.select({ count: sql<number>`count(*)` }).from(schema.transactions),

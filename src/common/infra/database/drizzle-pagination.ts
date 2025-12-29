@@ -9,3 +9,12 @@ export function createPaginationResponse<T>(total: number, page: number, limit: 
     data,
   };
 }
+
+export const withPagination = (page: number, limit: number) => {
+  // Possibilidade de alterar o limit para segurança
+  return {
+    page,
+    limit,
+    offset: (page - 1) * limit,
+  };
+};

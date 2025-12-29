@@ -1,3 +1,7 @@
+import { Paginated, PaginationParams } from '@/common/app/pagination';
+
+export interface ListTransactionsInput extends PaginationParams {}
+
 export interface TransactionListItemDTO {
   id: string;
   merchantId: string;
@@ -8,18 +12,6 @@ export interface TransactionListItemDTO {
   updatedAt: Date;
 }
 
-export interface ListTransactionsInput {
-  page: number;
-  limit: number;
-}
-
-export interface PaginatedResult<T> {
-  total: number;
-  page: number;
-  lastPage: number;
-  data: T[];
-}
-
 export abstract class ListTransactionsQuery {
-  abstract execute(input: ListTransactionsInput): Promise<PaginatedResult<TransactionListItemDTO>>;
+  abstract execute(input: ListTransactionsInput): Promise<Paginated<TransactionListItemDTO>>;
 }

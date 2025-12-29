@@ -6,6 +6,7 @@ import { DRIZZLE_DB } from '@/infra/database/postgres-drizzle/drizzle-connection
 import * as schema from '@/modules/payments/infra/database/drizzle/schema';
 import { ListTransactionsInput } from '@/modules/payments/app/queries/list-transactions.query';
 import { sql } from 'drizzle-orm';
+import { createPaginationResponse } from '@/common/infra/database/drizzle-pagination';
 
 export class DrizzleListTransactions implements ListTransactionsQuery {
   constructor(
@@ -35,20 +36,16 @@ export class DrizzleListTransactions implements ListTransactionsQuery {
     ]);
 
     const total = Number(totalResult[0].count);
+    const data = rows.map((row) => ({
+      id: row.id,
+      merchantId: row.merchantId,
+      idempotencyKey: row.idempotencyKey,
+      amount: row.amount.toString(),
+      status: row.status,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    }));
 
-    return {
-      total,
-      page,
-      lastPage: Math.ceil(total / limit),
-      data: rows.map((row) => ({
-        id: row.id,
-        merchantId: row.merchantId,
-        idempotencyKey: row.idempotencyKey,
-        amount: row.amount.toString(),
-        status: row.status,
-        createdAt: row.createdAt,
-        updatedAt: row.updatedAt,
-      })),
-    };
+    return createPaginationResponse(total, page, limit, data);
   }
 }

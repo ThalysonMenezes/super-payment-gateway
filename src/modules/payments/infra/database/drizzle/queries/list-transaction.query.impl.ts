@@ -1,12 +1,13 @@
 import { Inject } from '@nestjs/common';
-import { Transaction } from '@/modules/payments/domain/entities/transaction';
 import { ListTransactionsQuery } from '@/modules/payments/app/queries';
+import { ListTransactionsInput } from '@/modules/payments/app/queries/list-transactions.query';
+import { createPaginationResponse, withPagination } from '@/common/infra/database/drizzle-pagination';
+
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DRIZZLE_DB } from '@/infra/database/postgres-drizzle/drizzle-connection.module';
 import * as schema from '@/modules/payments/infra/database/drizzle/schema';
-import { ListTransactionsInput } from '@/modules/payments/app/queries/list-transactions.query';
 import { sql } from 'drizzle-orm';
-import { createPaginationResponse, withPagination } from '@/common/infra/database/drizzle-pagination';
+import { DrizzleErrorHandling } from '@/infra/database/postgres-drizzle/drizzle-error.exception';
 
 export class DrizzleListTransactions implements ListTransactionsQuery {
   constructor(
@@ -17,8 +18,17 @@ export class DrizzleListTransactions implements ListTransactionsQuery {
   async execute(input: ListTransactionsInput) {
     const { limit, offset, page } = withPagination(input.page, input.limit);
 
+    const errorHandler = DrizzleErrorHandling.context({
+      table: 'transactions',
+      method: 'query list',
+      operation: 'select',
+    });
+
     const [totalResult, rows] = await Promise.all([
-      this.db.select({ count: sql<number>`count(*)` }).from(schema.transactions),
+      this.db
+        .select({ count: sql<number>`count(*)` })
+        .from(schema.transactions)
+        .catch(errorHandler),
       this.db
         .select({
           id: schema.transactions.id,
@@ -31,7 +41,8 @@ export class DrizzleListTransactions implements ListTransactionsQuery {
         })
         .from(schema.transactions)
         .limit(limit)
-        .offset(offset),
+        .offset(offset)
+        .catch(errorHandler),
     ]);
 
     const total = Number(totalResult[0].count);

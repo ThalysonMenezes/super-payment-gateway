@@ -45,7 +45,7 @@ export class DrizzleListTransactions implements ListTransactionsQuery {
         .catch(errorHandler),
     ]);
 
-    const total = Number(totalResult[0].count);
+    const total = totalResult[0]?.count ?? 0;
     const data = rows.map((row) => ({
       id: row.id,
       merchantId: row.merchantId,

@@ -19,10 +19,13 @@
     },
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": true,
+    "strict": true,
+    "strictPropertyInitialization": false, // Garante que as propriedades de classe sejam inicializadas
+    "noUncheckedIndexedAccess": true, // Acesso inseguro a arrays e objetos
+    "noImplicitOverride": true, // Sobrescritas acidentais
+    "useUnknownInCatchVariables": true, // Uso inseguro de erros
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
-    "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
   }
 }

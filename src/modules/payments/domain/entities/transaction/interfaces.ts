@@ -8,6 +8,6 @@ export interface TransactionProps {
   amount: Amount;
   status: TransactionStatus;
   providerResponse?: Record<string, any> | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

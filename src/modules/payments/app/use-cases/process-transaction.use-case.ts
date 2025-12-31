@@ -30,7 +30,7 @@ export class ProcessTransactionUseCase {
       return existingTransaction;
     }
 
-    const transaction = new Transaction({
+    const transaction = Transaction.create({
       merchantId: input.merchantId,
       idempotencyKey: input.idempotencyKey,
       amount: Amount.create(input.amount),

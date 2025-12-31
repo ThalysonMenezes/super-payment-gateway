@@ -2,7 +2,7 @@ import { Transaction } from '@/modules/payments/domain/entities/transaction';
 
 export class TransactionMapper {
   static toDomain(raw: any): Transaction {
-    return new Transaction(
+    return Transaction.create(
       {
         merchantId: raw.merchantId,
         amount: raw.amount,

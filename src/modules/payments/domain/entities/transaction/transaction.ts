@@ -5,18 +5,25 @@ export class Transaction {
   private readonly _id: string; // Identidade
   private readonly _props: TransactionProps; // Estado
 
-  constructor(
-    props: Partial<TransactionProps> & Pick<TransactionProps, 'merchantId' | 'idempotencyKey' | 'amount'>,
-    id?: string,
-  ) {
+  private constructor(props: TransactionProps, id?: string) {
     this._id = id ?? randomUUID(); // Reidratação
-    this._props = {
-      ...props,
-      status: props.status ?? 'PENDING',
-      providerResponse: props.providerResponse ?? null,
-      createdAt: props.createdAt ?? new Date(),
-      updatedAt: props.updatedAt ?? new Date(),
-    } as TransactionProps;
+    this._props = props;
+  }
+
+  public static create(props: TransactionProps, id?: string): Transaction {
+    // Aqui pode ser adicionada validações específicas da Entidade
+
+    const date = new Date();
+    return new Transaction(
+      {
+        ...props,
+        status: props.status ?? 'PENDING',
+        providerResponse: props.providerResponse ?? null,
+        createdAt: props.createdAt ?? date,
+        updatedAt: props.updatedAt ?? date,
+      },
+      id,
+    );
   }
 
   public authorize(response: Record<string, any>): void {

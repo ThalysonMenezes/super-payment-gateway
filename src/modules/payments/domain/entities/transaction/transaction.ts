@@ -2,15 +2,20 @@ import { randomUUID } from 'node:crypto';
 import { TransactionProps, TransactionStatus } from './interfaces';
 
 export class Transaction {
-  private readonly _id: string; // Identidade
-  private readonly _props: TransactionProps; // Estado
+  private constructor(
+    private readonly _props: TransactionProps,
+    private readonly _id: string = randomUUID(),
+  ) {}
 
-  private constructor(props: TransactionProps, id?: string) {
-    this._id = id ?? randomUUID(); // Reidratação
-    this._props = props;
+  public static create(props: TransactionProps): Transaction {
+    return this.build(props);
   }
 
-  public static create(props: TransactionProps, id?: string): Transaction {
+  public static rehydrate(props: TransactionProps, id: string): Transaction {
+    return this.build(props, id);
+  }
+
+  private static build(props: TransactionProps, id?: string): Transaction {
     // Aqui pode ser adicionada validações específicas da Entidade
 
     const date = new Date();

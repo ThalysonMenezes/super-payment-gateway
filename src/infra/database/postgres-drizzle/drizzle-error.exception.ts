@@ -153,6 +153,7 @@ export class DrizzleErrorHandling {
     }
 
     console.log('[metadata]', this._props);
+    console.log();
   }
 
   private static isDatabaseError(cause: DatabaseError) {
@@ -164,5 +165,6 @@ export class DrizzleErrorHandling {
     if (constraint) this._props.constraint = constraint;
 
     console.log('[metadata]', this._props);
+    console.log();
   }
 }

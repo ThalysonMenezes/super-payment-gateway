@@ -1,17 +1,13 @@
 import { Paginated, PaginationParams } from '@/common/app/pagination';
+import { TransactionProps } from '@/modules/payments/domain/entities/transaction/interfaces';
 
 export interface ListTransactionsInput extends PaginationParams {}
 
-export interface TransactionListItemDTO {
+export interface TransactionView extends Omit<TransactionProps, 'amount'> {
   id: string;
-  merchantId: string;
-  idempotencyKey: string;
   amount: string;
-  status: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export abstract class ListTransactionsQuery {
-  abstract execute(input: ListTransactionsInput): Promise<Paginated<TransactionListItemDTO>>;
+  abstract execute(input: ListTransactionsInput): Promise<Paginated<TransactionView>>;
 }

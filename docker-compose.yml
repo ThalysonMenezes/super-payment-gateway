@@ -13,3 +13,22 @@ services:
         limits:
           cpus: '0.75'
           memory: '1.5GB'
+
+  redis:
+    image: redis:7-alpine
+    container_name: gateway-cache
+    ports:
+      - 6380:6379
+    volumes:
+      - redis_data:/data
+
+  redis-insight:
+    image: redis/redisinsight
+    container_name: redis-insight
+    ports:
+      - 5540:5540
+    depends_on:
+      - redis
+
+volumes:
+  redis_data:
